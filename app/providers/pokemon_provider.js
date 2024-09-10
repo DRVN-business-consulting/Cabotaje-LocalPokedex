@@ -101,13 +101,20 @@ export function PokemonContextProvider({children}) {
     }
 
     const updatePokemon =  async (details, oldTypes, callback) => {
-        const imageURI = FileSystem.documentDirectory + 'pokemon_images/' + details.name.english + "_" + new Date().getTime() + ".png";
+        const name = details.name.english;
+      
+      //  const imageURI = FileSystem.documentDirectory + 'pokemon_images/' + details.name.english + "_" + new Date().getTime() + ".png";
+        const hiURI =   FileSystem.documentDirectory + 'pokemon_images/' + name + '_hi_res.png'
+        const thumbURI =   FileSystem.documentDirectory + 'pokemon_images/' + name + '_thumbnail.png'
+      
         try {
-            await FileSystem.copyAsync({ from: details.image.hi_res, to: imageURI})
+            await FileSystem.copyAsync({ from: details.image.hi_res, to: hiURI})
+            await FileSystem.copyAsync({ from: details.image.thumbnail, to: thumbURI})
         } catch (error) {
             console.log(error)
         }
-        details.image = { hi_res: imageURI, thumbnail: imageURI};
+        details.image = { hi_res: hiURI, thumbnail: thumbURI};
+       // console.log(details.image, "image")
 
         setPokemons(pokemons => {
             const pokemonsToUpdate = [...pokemons];
